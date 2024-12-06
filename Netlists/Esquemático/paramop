@@ -1,0 +1,71 @@
+*Score=329.7  GanhOpAmp=72dB_(FGM=1.5)  GanhoLNA=39dB_(FGMc=0)  FSup=6.3KHz_(FFCs=0)  FInf=4.8Hz_(FFCi=7)  CMRR=66dB_(FCMRR=0)
+*PSRR=68_(FPSRR=0) MF=53_(FMF=0) Slew Rate=0.55V/us_(FSL=0) Pot.=12.7uW_(FP=0.51) Area=2.44e+04um2_(Farea=0.097)
+*Offset=0.2mV_(Foffset=0) Noise=7.34uV_(Fnoise=17) outLevel=0V  Weakin=0
+
+.include modeltsmc65_tt_s
+.Param   X1= 0.400  X2= 14.959  X3= 1.449  X4= 1.007  X5= 61.624  X6= 13.218  
+.Param   X7= 2.000  X8= 9.826  X9= 0.270  X10= 5.808  X11= -0.461  X12= 0.104  X13= 479.832  
+.Param   X14= 15.069  
+** ( 0.400  14.959  1.449  1.007  61.624  13.218  2.000  9.826  0.270  5.808  -0.461  0.104  479.832  15.069  )
+.Param   M1= 1.00  
+
+.param cond = 0 FreqM = 50Meg 
+Vdd vd 0 DC 1.20V AC 1V
+Vss vs 0 DC 0V
+V1in in 0 DC 0.60010077V
+V2in ip 0 DC 0.60V
+
+
+
+
+
+.AC DEC 40 0.50 FreqM
+.meas AC maximo max Vdb(out)
+.if (cond == 1) 
+.meas AC MF find vp(out) when vdb(out)=0
+.endif 
+
+.if (cond == 2) 
+.noise V(out) V1in  0
+.meas AC GainFC find Vdb(out) at = 6.3KHz
+.meas AC GainFCinf find Vdb(out) at = 2.0Hz
+.meas AC GainMax max Vdb(out)
+.meas AC noise_integ RMS onoise from=8.57 to=6.23KHz
+.meas AC ruidoTotal Param = 'noise_integ*sqrt(6.23KK - 8.57)'
+.endif 
+
+.ALTER
+Vdd vd 0 DC 1.20V
+Vss vs 0 DC 0V AC 1V
+
+.ALTER
+.param cond = 1 
+Vss vs 0 DC 0V
+V2in ip 0 DC 0.60V AC 1V 
+
+.ALTER
+.include feedbackCir 
+.param cond = 2 FreqM = 62.5KHz
+V1in  en ep DC 0 AC 1V 
+V2in vp    0 DC 0.60V
+
+
+*****************************************************************
+* Vdd (V): 	 1.2
+* open Gain (dB): 	 > 75 40 
+* Sup. Cutoff Freq. (KHz): 	 v  6   6.5  10
+* Slew Rate (V/us): 	 > 0.05 10
+* CMRR (dB): 	 > 60 10
+* PSRR (dB): 	 > 60 10
+* Phase-margin Range (Degree): 	 v   45 60 100
+* Common Mode Voltage Range (V): 	 0.5  0.7
+* CMRR Bandwidth (Hz): 	 0.5 100
+* input Noise (uV): 	 < 4.0  20
+* Input offset (mV): 	 < 0.2  4
+* Area (um X um): 	 / 50000 0.2
+* Power (uW): 	 / 50 2
+* Inf. Cutoff Freq. (Hz): 	 < 2   5
+* closed Gain (dB): 	 v  39  41  200
+* Constants: 	 1
+* Weak Inversion Transistors: 	 
+* Weights (CutFreqSup, CutFreqInf, outlev, WTran): 	 20 1 1 1

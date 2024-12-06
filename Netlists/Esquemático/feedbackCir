@@ -1,0 +1,29 @@
+*Capacitores de acoplamento
+*Cin  in en  'X13*1p'
+XCin  in  en   mimcap_sin  LT=10u  WT=10u MIMFLAG=3 mf=120
+
+*Cip  ip  ep  'X13*1p'
+XCip  ip  ep   MIMCAP_SIN  LT=10u  WT=10u MIMFLAG=3 mf=120
+
+*Cinp en  0   2.7pF
+*Cinp ep  0   2.7pF
+
+
+*Realimentacao
+*Cf   in  out  0.18pF
+XCf  in   out   MIMCAP_SIN  LT=10u  WT=10u MIMFLAG=3 mf=1
+*Rf   in  out  13000G  *noise
+.param Lres=8um Wres=0.5um
+*simetrico
+Mf1   in   in     int   int    pch w= Wres  l='X14*1u' Ad='Wpadrao*Wres' As='Wpadrao*Wres' Ps='Wpadrao*2+Wres' Pd='Wpadrao*2+Wres'
+Mf2   out  out    int   int    pch w= Wres  l='X14*1u' Ad='Wpadrao*Wres' As='Wpadrao*Wres' Ps='Wpadrao*2+Wres' Pd='Wpadrao*2+Wres'
+
+
+* entrada positiva
+*Cfp  ip   vp  0.18pF
+XCfp  ip    vp   MIMCAP_SIN  LT=10u  WT=10u MIMFLAG=3 mf=1
+*Rfp  ip   vp  13000G  *noise=1
+*simetrico
+Mf1p   ip     ip    intp  intp   pch w= Wres  l='X14*1u' Ad='Wpadrao*Wres' As='Wpadrao*Wres' Ps='Wpadrao*2+Wres' Pd='Wpadrao*2+Wres'
+Mf2p   vp     vp    intp  intp   pch w= Wres  l='X14*1u' Ad='Wpadrao*Wres' As='Wpadrao*Wres' Ps='Wpadrao*2+Wres' Pd='Wpadrao*2+Wres'
+
